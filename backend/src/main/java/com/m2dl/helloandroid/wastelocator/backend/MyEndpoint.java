@@ -28,7 +28,7 @@ public class MyEndpoint {
     @ApiMethod(name = "sayHi",httpMethod = "POST")
     public MyBean sayHi(@Named("name") String name) {
         MyBean response = new MyBean();
-        response.setImgUrl("Hi, " + name);
+        response.setData("Hi, " + name);
 
         return response;
     }

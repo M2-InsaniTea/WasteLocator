@@ -3,13 +3,13 @@ package com.m2dl.helloandroid.wastelocator.backend;
 /** The object model for the data we are sending through endpoints */
 public class MyBean {
 
-    private String imgUrl;
+    private String myData;
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getData() {
+        return myData;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setData(String imgUrl) {
+        this.myData = imgUrl;
     }
 }
