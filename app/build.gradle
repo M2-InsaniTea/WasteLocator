@@ -17,7 +17,7 @@ android {
          * "http://10.0.2.2:8080/_ah/api/"
          */
         buildConfigField "String", "ROOT_URL",
-                "\"http://192.168.0.12:8080/_ah/api/\""
+                "\"https://androidbackend-1191.appspot.com/_ah/api/\""
         // The IP ADDRESS of your SERVER. Yours may be different.
         /**
          * Defines whether authentication is required or not. Only works once
