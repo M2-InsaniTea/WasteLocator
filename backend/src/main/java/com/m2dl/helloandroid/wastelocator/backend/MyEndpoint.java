@@ -12,20 +12,24 @@ import com.google.api.server.spi.config.ApiNamespace;
 
 import javax.inject.Named;
 
-/** An endpoint class we are exposing */
+/**
+ * An endpoint class we are exposing
+ */
 @Api(
-  name = "myApi",
-  version = "v1",
-  namespace = @ApiNamespace(
-    ownerDomain = "backend.wastelocator.helloandroid.m2dl.com",
-    ownerName = "backend.wastelocator.helloandroid.m2dl.com",
-    packagePath=""
-  )
+        name = "wasteApi",
+        version = "v2",
+        namespace = @ApiNamespace(
+                ownerDomain = Constants.API_OWNER,
+                ownerName = Constants.API_OWNER,
+                packagePath = Constants.API_PACKAGE_PATH
+        )
 )
 public class MyEndpoint {
 
-    /** A simple endpoint method that takes a name and says Hi back */
-    @ApiMethod(name = "sayHi",httpMethod = "POST")
+    /**
+     * A simple endpoint method that takes a name and says Hi back
+     */
+    @ApiMethod(name = "sayHi", httpMethod = "POST")
     public MyBean sayHi(@Named("name") String name) {
         MyBean response = new MyBean();
         response.setData("Hi, " + name);

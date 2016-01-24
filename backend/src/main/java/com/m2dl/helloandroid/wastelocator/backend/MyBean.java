@@ -9,7 +9,7 @@ public class MyBean {
         return myData;
     }
 
-    public void setData(String imgUrl) {
-        this.myData = imgUrl;
+    public void setData(String data) {
+        this.myData = data;
     }
 }
