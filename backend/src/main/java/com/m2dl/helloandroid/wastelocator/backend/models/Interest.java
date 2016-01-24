@@ -17,11 +17,19 @@ public class Interest {
     @Parent
     Key<UserAccount> submitter;
 
+    public Interest(String photoId, GeoPt[] locations) {
+        this.photoId = photoId;
+        this.locations = locations;
+    }
+
+    public Interest() {
+    }
+
     private String photoId;
 
-    private GeoPt location;
+    private GeoPt[] locations;
 
-    Key<Tag>[] tags;
+    private Key<Tag>[] tags;
 
     public Long getKey() {
         return key;
@@ -47,19 +55,19 @@ public class Interest {
         this.photoId = photoId;
     }
 
-    public GeoPt getLocation() {
-        return location;
-    }
-
-    public void setLocation(GeoPt location) {
-        this.location = location;
-    }
-
     public Key<Tag>[] getTags() {
         return tags;
     }
 
     public void setTags(Key<Tag>[] tags) {
         this.tags = tags;
+    }
+
+    public GeoPt[] getLocations() {
+        return locations;
+    }
+
+    public void setLocations(GeoPt[] locations) {
+        this.locations = locations;
     }
 }
