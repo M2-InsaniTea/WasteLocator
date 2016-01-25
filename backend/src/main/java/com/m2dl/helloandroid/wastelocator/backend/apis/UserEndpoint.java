@@ -11,6 +11,7 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.google.api.server.spi.response.BadRequestException;
 import com.google.appengine.api.users.User;
 import com.m2dl.helloandroid.wastelocator.backend.Constants;
 import com.m2dl.helloandroid.wastelocator.backend.MyBean;
@@ -37,7 +38,11 @@ import static com.m2dl.helloandroid.wastelocator.backend.OfyService.ofy;
 )
 public class UserEndpoint {
     @ApiMethod(httpMethod = "GET")
-    public UserAccount connect(@Named("username") String username) {
+    public final UserAccount connect(@Named("username") String username) throws BadRequestException {
+        if (username == null || username.trim().length() <= 0) {
+            throw new BadRequestException("Empty username");
+        }
+
         UserAccount account = ofy().load().type(UserAccount.class).filter("username", username).first().now();
 
         if (account == null) {
@@ -46,6 +51,12 @@ public class UserEndpoint {
             ofy().save().entity(account).now();
         }
 
+        return account;
+    }
+
+    @ApiMethod(httpMethod = "POST")
+    public final UserAccount verify(@Named("id") Long id) {
+        UserAccount account = ofy().load().type(UserAccount.class).id(id).now();
         return account;
     }
 }
