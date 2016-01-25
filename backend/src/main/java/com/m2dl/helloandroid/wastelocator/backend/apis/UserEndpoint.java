@@ -55,7 +55,7 @@ public class UserEndpoint {
     }
 
     @ApiMethod(httpMethod = "POST")
-    public final UserAccount verify(@Named("id") Long id) {
+    public final UserAccount detail(@Named("id") Long id) {
         UserAccount account = ofy().load().type(UserAccount.class).id(id).now();
         return account;
     }
