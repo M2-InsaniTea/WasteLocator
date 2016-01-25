@@ -16,26 +16,56 @@
 
 package com.m2dl.helloandroid.wastelocator;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.m2dl.helloandroid.wastelocator.backend.wasteApi.WasteApi;
+import com.m2dl.helloandroid.wastelocator.backend.wasteApi.model.Interest;
+import com.m2dl.helloandroid.wastelocator.backend.wasteApi.model.ListInterestBean;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 /**
  * This shows how to create a simple activity with a map and a marker on the map.
  */
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private WasteApi wasteApi;
+
+    GoogleMap mMap;
+
+    static final CameraPosition SYDNEY =
+            new CameraPosition.Builder().target(new LatLng(-33.87365, 151.20689))
+                    .zoom(15.5f)
+                    .bearing(0)
+                    .tilt(25)
+                    .build();
+    static final CameraPosition BMIG =
+            new CameraPosition.Builder().target(new LatLng(43.560802, 1.468649))
+                    .zoom(16.5f)
+                    .bearing(0)
+                    .tilt(25)
+                    .build();
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        wasteApi = CloudEndpointBuilderHelper.getEndpoints();
         setContentView(R.layout.activity_maps);
 
         SupportMapFragment mapFragment =
@@ -50,7 +80,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap map) {
-        map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+
+        mMap = map;
+
+        new GetInterestsAsyncTask(this).execute();
+
+        map.addMarker(new MarkerOptions().position(BMIG.target).title("Marker"));
+
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(BMIG));
+
     }
 
     @Override
@@ -69,4 +107,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return false;
     }
+
+    public void callbackFromGetInterestsAsyncTask(ListInterestBean result) {
+
+        List<Interest> interests = result.getInterests();
+
+        for (Interest interest : interests) {
+            drawInterest(interest);
+        }
+
+    }
+
+    public void drawInterest(Interest interest) {
+
+        System.out.println(interest.getId());
+
+    }
+
 }
