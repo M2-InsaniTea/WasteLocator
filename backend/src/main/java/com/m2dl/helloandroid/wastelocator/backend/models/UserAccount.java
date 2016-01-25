@@ -10,7 +10,7 @@ import com.googlecode.objectify.annotation.Index;
 @Entity
 public class UserAccount {
     @Id
-    private Long key;
+    private Long id;
 
     @Index
     private String username;
@@ -22,12 +22,12 @@ public class UserAccount {
     public UserAccount() {
     }
 
-    public Long getKey() {
-        return key;
+    public Long getId() {
+        return id;
     }
 
-    public void setKey(Long key) {
-        this.key = key;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {

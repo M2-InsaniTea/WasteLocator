@@ -1,10 +1,11 @@
 package com.m2dl.helloandroid.wastelocator.backend.models;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
-import java.awt.Color;
+import java.beans.Transient;
 
 /**
  * Created by flemoal on 21/01/16.
@@ -12,27 +13,27 @@ import java.awt.Color;
 @Entity
 public class Tag {
     @Id
-    private Long key;
+    private Long id;
 
     @Index
     private String name;
 
-    private Color color;
+    private String color;
 
-    public Tag(String name, Color color) {
+    public Tag(String name, String color) {
         this.name = name;
         this.color = color;
-    }
-
-    public Long getKey() {
-        return key;
     }
 
     public Tag() {
     }
 
-    public void setKey(Long key) {
-        this.key = key;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -43,11 +44,17 @@ public class Tag {
         this.name = name;
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(String color) {
         this.color = color;
     }
+
+    @Transient
+    public Key<Tag> getKey() {
+        return Key.create(Tag.class, id);
+    }
+
 }

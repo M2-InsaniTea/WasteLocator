@@ -6,37 +6,34 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Parent;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by flemoal on 21/01/16.
  */
 @Entity
 public class Interest {
     @Id
-    private Long key;
+    private Long id;
 
     @Parent
     Key<UserAccount> submitter;
-
-    public Interest(String photoId, GeoPt[] locations) {
-        this.photoId = photoId;
-        this.locations = locations;
-    }
-
     public Interest() {
     }
 
     private String photoId;
 
-    private GeoPt[] locations;
+    private Set<GeoPt> locations = new HashSet<>();
 
-    private Key<Tag>[] tags;
+    private Set<Key<Tag>> tags = new HashSet<>();
 
-    public Long getKey() {
-        return key;
+    public Long getId() {
+        return id;
     }
 
-    public void setKey(Long key) {
-        this.key = key;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Key<UserAccount> getSubmitter() {
@@ -55,19 +52,34 @@ public class Interest {
         this.photoId = photoId;
     }
 
-    public Key<Tag>[] getTags() {
+    public Set<Key<Tag>> getTags() {
         return tags;
     }
 
-    public void setTags(Key<Tag>[] tags) {
+    public void setTags(Set<Key<Tag>> tags) {
         this.tags = tags;
     }
 
-    public GeoPt[] getLocations() {
+    public Set<GeoPt> getLocations() {
         return locations;
     }
 
-    public void setLocations(GeoPt[] locations) {
+    public void setLocations(Set<GeoPt> locations) {
         this.locations = locations;
     }
+
+    public Interest addLocation(GeoPt geoPt) {
+        locations.add(geoPt);
+        return this;
+    }
+
+    public Interest addLocation(double latitude, double longitude) {
+        return addLocation(new GeoPt((float) latitude, (float) longitude));
+    }
+
+    public Interest addTag(Key<Tag> tagKey) {
+        tags.add(tagKey);
+        return this;
+    }
+
 }
