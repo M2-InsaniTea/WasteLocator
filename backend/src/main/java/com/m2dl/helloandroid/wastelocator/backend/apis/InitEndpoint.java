@@ -6,6 +6,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.googlecode.objectify.Key;
 import com.m2dl.helloandroid.wastelocator.backend.Constants;
+import com.m2dl.helloandroid.wastelocator.backend.beans.InitBean;
 import com.m2dl.helloandroid.wastelocator.backend.models.Interest;
 import com.m2dl.helloandroid.wastelocator.backend.models.Tag;
 import com.m2dl.helloandroid.wastelocator.backend.models.UserAccount;
@@ -80,7 +81,7 @@ public class InitEndpoint {
             interestsVerre.add(new Interest().addLocation(43.57124, 1.46269));
             interestsVerre.add(new Interest().addLocation(43.56731, 1.46477));
             for (Interest interestVerre : interestsVerre) {
-                interestVerre.addTag(tagVerre.getKey());
+                interestVerre.addTag(tagVerre);
             }
             interests.addAll(interestsVerre);
 
@@ -88,7 +89,7 @@ public class InitEndpoint {
             interestsTextile.add(new Interest().addLocation(43.55505, 1.46811));
             interestsTextile.add(new Interest().addLocation(43.56305, 1.45935));
             for (Interest interestTextile : interestsTextile) {
-                interestTextile.addTag(tagTextile.getKey());
+                interestTextile.addTag(tagTextile);
             }
             interests.addAll(interestsTextile);
 
@@ -100,7 +101,7 @@ public class InitEndpoint {
             interestsCarton.add(new Interest().addLocation(43.56577, 1.46736).addLocation(43.56593, 1.46769).addLocation(43.56577, 1.46785).addLocation(43.5656, 1.46753));
             interestsCarton.add(new Interest().addLocation(43.56665, 1.4695).addLocation(43.56674, 1.46968).addLocation(43.56657, 1.46985).addLocation(43.5665, 1.46965));
             for (Interest interestCarton : interestsCarton) {
-                interestCarton.addTag(tagCarton.getKey());
+                interestCarton.addTag(tagCarton);
             }
             interests.addAll(interestsCarton);
 
@@ -108,7 +109,7 @@ public class InitEndpoint {
             interestsPile.add(new Interest().addLocation(43.56362, 1.46487).addLocation(43.56381, 1.46537).addLocation(43.56354, 1.4657).addLocation(43.5633, 1.46522));
             interestsPile.add(new Interest().addLocation(43.56456, 1.46589).addLocation(43.56472, 1.46617).addLocation(43.56458, 1.46629).addLocation(43.56446, 1.46602));
             for (Interest interestPile : interestsPile) {
-                interestPile.addTag(tagPile.getKey());
+                interestPile.addTag(tagPile);
             }
             interests.addAll(interestsPile);
 
@@ -138,12 +139,12 @@ public class InitEndpoint {
             interestsPapier.add(new Interest().addLocation(43.56025, 1.46732).addLocation(43.56032, 1.46748).addLocation(43.55976, 1.46805).addLocation(43.55968, 1.46787));
             interestsPapier.add(new Interest().addLocation(43.55844, 1.46891).addLocation(43.55852, 1.46906).addLocation(43.55798, 1.4696).addLocation(43.5579, 1.46945));
             for (Interest interestPapier : interestsPapier) {
-                interestPapier.addTag(tagPapier.getKey());
+                interestPapier.addTag(tagPapier);
             }
             interests.addAll(interestsPapier);
 
             for (Interest interest : interests) {
-                interest.addTag(tagRecyclage.getKey());
+                interest.addTag(tagRecyclage);
             }
 
             Map<Key<Interest>, Interest> resInterest = ofy().save().entities(interests).now();

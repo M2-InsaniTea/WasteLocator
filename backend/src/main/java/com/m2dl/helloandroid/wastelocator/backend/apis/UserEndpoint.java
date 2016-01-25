@@ -6,15 +6,12 @@
 
 package com.m2dl.helloandroid.wastelocator.backend.apis;
 
-import com.google.api.server.spi.ServiceException;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.BadRequestException;
-import com.google.appengine.api.users.User;
 import com.m2dl.helloandroid.wastelocator.backend.Constants;
-import com.m2dl.helloandroid.wastelocator.backend.MyBean;
 import com.m2dl.helloandroid.wastelocator.backend.models.UserAccount;
 
 import javax.inject.Named;

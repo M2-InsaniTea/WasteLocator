@@ -6,8 +6,10 @@
         <init-param>
             <param-name>services</param-name>
             <param-value>
+                com.m2dl.helloandroid.wastelocator.backend.apis.InitEndpoint,
                 com.m2dl.helloandroid.wastelocator.backend.apis.UserEndpoint,
-                com.m2dl.helloandroid.wastelocator.backend.apis.InitEndpoint
+                com.m2dl.helloandroid.wastelocator.backend.apis.TagEndpoint,
+                com.m2dl.helloandroid.wastelocator.backend.apis.InterestEndpoint
             </param-value>
         </init-param>
     </servlet>

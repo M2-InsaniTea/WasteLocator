@@ -1,13 +1,25 @@
 package com.m2dl.helloandroid.wastelocator.backend.models;
 
+import com.google.api.server.spi.config.AnnotationBoolean;
+import com.google.api.server.spi.config.ApiResourceProperty;
 import com.google.appengine.api.datastore.GeoPt;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Ignore;
+import com.googlecode.objectify.annotation.Load;
+import com.googlecode.objectify.annotation.OnLoad;
 import com.googlecode.objectify.annotation.Parent;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by flemoal on 21/01/16.
@@ -17,16 +29,32 @@ public class Interest {
     @Id
     private Long id;
 
-    @Parent
-    Key<UserAccount> submitter;
+    @Load
+    private Ref<UserAccount> submitter;
+
     public Interest() {
+    }
+
+    @Ignore List<Long> tagIds = new LinkedList<>();
+    @OnLoad
+    void loadTagIds()
+    {
+        tagIds = Lists.transform(new LinkedList<>(tags), new Function<Ref<Tag>, Long>() {
+
+            @Override
+            public Long apply(Ref<Tag> input) {
+                return input.getKey().getId();
+            }
+        });
     }
 
     private String photoId;
 
     private Set<GeoPt> locations = new HashSet<>();
 
-    private Set<Key<Tag>> tags = new HashSet<>();
+    @Load
+    @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
+    private Set<Ref<Tag>> tags = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -36,12 +64,12 @@ public class Interest {
         this.id = id;
     }
 
-    public Key<UserAccount> getSubmitter() {
-        return submitter;
+    public UserAccount getSubmitter() {
+        return submitter == null ? null : submitter.get();
     }
 
-    public void setSubmitter(Key<UserAccount> submitter) {
-        this.submitter = submitter;
+    public void setSubmitter(UserAccount submitter) {
+        this.submitter = Ref.create(submitter);
     }
 
     public String getPhotoId() {
@@ -52,11 +80,11 @@ public class Interest {
         this.photoId = photoId;
     }
 
-    public Set<Key<Tag>> getTags() {
+    public Set<Ref<Tag>> getTags() {
         return tags;
     }
 
-    public void setTags(Set<Key<Tag>> tags) {
+    public void setTags(Set<Ref<Tag>> tags) {
         this.tags = tags;
     }
 
@@ -68,6 +96,11 @@ public class Interest {
         this.locations = locations;
     }
 
+    public List<Long> getTagIds() {
+        return tagIds;
+    }
+
+    // Additional methods
     public Interest addLocation(GeoPt geoPt) {
         locations.add(geoPt);
         return this;
@@ -77,8 +110,8 @@ public class Interest {
         return addLocation(new GeoPt((float) latitude, (float) longitude));
     }
 
-    public Interest addTag(Key<Tag> tagKey) {
-        tags.add(tagKey);
+    public Interest addTag(Tag tag) {
+        tags.add(Ref.create(tag));
         return this;
     }
 

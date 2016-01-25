@@ -50,11 +50,4 @@ public class Tag {
 
     public void setColor(String color) {
         this.color = color;
-    }
-
-    @Transient
-    public Key<Tag> getKey() {
-        return Key.create(Tag.class, id);
-    }
-
-}
+    }}

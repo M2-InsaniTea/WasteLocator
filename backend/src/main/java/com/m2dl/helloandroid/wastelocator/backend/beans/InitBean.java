@@ -1,6 +1,7 @@
-package com.m2dl.helloandroid.wastelocator.backend.apis;
+package com.m2dl.helloandroid.wastelocator.backend.beans;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ public class InitBean {
     private List<String> data;
 
     public InitBean() {
-        this(new ArrayList<String>());
+        this(new LinkedList<String>());
     }
 
     public InitBean(List<String> data) {
