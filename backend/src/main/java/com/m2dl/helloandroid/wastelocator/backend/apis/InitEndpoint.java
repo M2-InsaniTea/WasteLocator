@@ -43,11 +43,11 @@ public class InitEndpoint {
             Tag tagDegradation = new Tag("Dégradation", "#FE642E");
             Tag tagFuite = new Tag("Fuite d'eau", "#819FF7");
 
-            Tag tagCarton = new Tag("Carton", "#FA9800");
-            Tag tagPapier = new Tag("Papier", "#FA9800");
-            Tag tagPile = new Tag("Pile", "#FA9800");
-            Tag tagTextile = new Tag("Textile", "#FA9800");
-            Tag tagVerre = new Tag("Verre", "#FA9800");
+            Tag tagCarton = new Tag("Carton", "#FFAA1E");
+            Tag tagPapier = new Tag("Papier", "#00CFFE");
+            Tag tagPile = new Tag("Pile", "#9B2AFB");
+            Tag tagTextile = new Tag("Textile", "#FF2E92");
+            Tag tagVerre = new Tag("Verre", "#6DEA2C");
 
             tags.add(tagRecyclage);
             tags.add(tagDegradation);
