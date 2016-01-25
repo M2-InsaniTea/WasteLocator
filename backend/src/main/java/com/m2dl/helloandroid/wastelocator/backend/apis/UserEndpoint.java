@@ -37,7 +37,7 @@ import static com.m2dl.helloandroid.wastelocator.backend.OfyService.ofy;
         resource = "users"
 )
 public class UserEndpoint {
-    @ApiMethod(httpMethod = "GET")
+    @ApiMethod(httpMethod = "PUT")
     public final UserAccount connect(@Named("username") String username) throws BadRequestException {
         if (username == null || username.trim().length() <= 0) {
             throw new BadRequestException("Empty username");
@@ -54,7 +54,7 @@ public class UserEndpoint {
         return account;
     }
 
-    @ApiMethod(httpMethod = "POST")
+    @ApiMethod(httpMethod = "GET")
     public final UserAccount detail(@Named("id") Long id) {
         UserAccount account = ofy().load().type(UserAccount.class).id(id).now();
         return account;
