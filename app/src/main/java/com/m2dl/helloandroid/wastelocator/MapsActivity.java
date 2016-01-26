@@ -44,6 +44,7 @@ import com.m2dl.helloandroid.wastelocator.backend.wasteApi.model.UserAccount;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.content.Intent;
 
 /**
  * This shows how to create a simple activity with a map and a marker on the map.
@@ -107,6 +108,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         switch (item.getItemId()) {
             case R.id.disconnect:
             case R.id.post_interest:
+                Intent intent = new Intent(this, InterestActivity.class);
+                startActivity(intent);
                 System.out.println("You have chosen "+item.getTitle());
                 return true;
         }

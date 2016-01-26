@@ -2,6 +2,7 @@ package com.m2dl.helloandroid.wastelocator.backend.models;
 
 import com.google.api.server.spi.config.AnnotationBoolean;
 import com.google.api.server.spi.config.ApiResourceProperty;
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -48,7 +49,7 @@ public class Interest {
         });
     }
 
-    private String photoId;
+    private BlobKey photo;
 
     private Set<GeoPt> locations = new HashSet<>();
 
@@ -72,12 +73,12 @@ public class Interest {
         this.submitter = Ref.create(submitter);
     }
 
-    public String getPhotoId() {
-        return photoId;
+    public BlobKey getPhoto() {
+        return photo;
     }
 
-    public void setPhotoId(String photoId) {
-        this.photoId = photoId;
+    public void setPhoto(BlobKey photo) {
+        this.photo = photo;
     }
 
     public Set<Ref<Tag>> getTags() {
