@@ -16,6 +16,7 @@
 
 package com.m2dl.helloandroid.wastelocator;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -29,6 +30,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -163,7 +166,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         } else {
 
+            PolygonOptions options = new PolygonOptions();
+            for (GeoPt geoPt : locations) {
 
+                double latitude = geoPt.getLatitude();
+                double longitude = geoPt.getLongitude();
+
+                options.add(new LatLng(latitude, longitude));
+
+            }
+            int color = Color.parseColor(getColorOfInterest(interest, tags));
+            options.fillColor(color);
+            options.strokeColor(color);
+
+            mMap.addPolygon(options);
 
         }
 
