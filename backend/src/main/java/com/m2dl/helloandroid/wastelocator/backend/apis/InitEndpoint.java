@@ -162,16 +162,16 @@ public class InitEndpoint {
     public final InitBean clean() {
         List<String> result = new LinkedList<>();
 
-        List<Key<Tag>> tagKeys = ofy().load().type(Tag.class).keys().list();
-        List<Key<UserAccount>> userKeys = ofy().load().type(UserAccount.class).keys().list();
         List<Key<Interest>> interestKeys = ofy().load().type(Interest.class).keys().list();
+        List<Key<UserAccount>> userKeys = ofy().load().type(UserAccount.class).keys().list();
+        List<Key<Tag>> tagKeys = ofy().load().type(Tag.class).keys().list();
 
-        ofy().delete().keys(tagKeys).now();
-        ofy().delete().keys(userKeys).now();
         ofy().delete().keys(interestKeys).now();
+        ofy().delete().keys(userKeys).now();
+        ofy().delete().keys(tagKeys).now();
 
-        result.add(String.format("%d entries deleted from 'Tag'", tagKeys.size()));
         result.add(String.format("%d entries deleted from 'UserAccount'", userKeys.size()));
+        result.add(String.format("%d entries deleted from 'Tag'", tagKeys.size()));
         result.add(String.format("%d entries deleted from 'Interest'", interestKeys.size()));
 
         InitBean bean = new InitBean(result);
