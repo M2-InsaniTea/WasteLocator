@@ -98,8 +98,12 @@ public class PictureStep extends WizardStep {
         }
     }
 
-    private class SubmitPhotoAsynchTask extends AsyncTask<String, Void, UserAccount> {
+    private class SubmitPhotoAsynchTask extends AsyncTask<String, Void, String> {
 
+        @Override
+        protected String doInBackground(String... params) {
+            return null;
+        }
     }
 
 }
