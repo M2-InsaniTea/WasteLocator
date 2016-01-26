@@ -18,6 +18,28 @@
         <url-pattern>/_ah/spi/*</url-pattern>
     </servlet-mapping>
 
+
+
+    <servlet>
+        <servlet-name>Upload</servlet-name>
+        <servlet-class>com.m2dl.helloandroid.wastelocator.backend.apis.UploadServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>Serve</servlet-name>
+        <servlet-class>com.m2dl.helloandroid.wastelocator.backend.apis.ServeServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Upload</servlet-name>
+        <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Serve</servlet-name>
+        <url-pattern>/serve</url-pattern>
+    </servlet-mapping>
+
     <filter>
         <filter-name>ObjectifyFilter</filter-name>
         <filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
