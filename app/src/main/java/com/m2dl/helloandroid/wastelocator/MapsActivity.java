@@ -22,6 +22,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -64,6 +65,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         switch (item.getItemId()) {
             case R.id.disconnect:
             case R.id.post_interest:
+                Intent intent = new Intent(this, InterestActivity.class);
+                startActivity(intent);
                 System.out.println("You have chosen "+item.getTitle());
                 return true;
         }
