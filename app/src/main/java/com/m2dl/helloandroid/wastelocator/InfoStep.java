@@ -1,45 +1,51 @@
 package com.m2dl.helloandroid.wastelocator;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.m2dl.helloandroid.wastelocator.backend.wasteApi.WasteApi;
+import com.m2dl.helloandroid.wastelocator.backend.wasteApi.model.Tag;
 
 import org.codepond.wizardroid.WizardStep;
 import org.codepond.wizardroid.persistence.ContextVariable;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class InfoStep extends WizardStep {
 
     @ContextVariable
-    private String picName;
-    @ContextVariable
-    private String tags;
+    private List<Tag> tags;
+
+    private HashMap<Integer,Tag> selected;
+    private Integer defaultBackgroudColor;
 
 
     public InfoStep() {
         // Required empty public constructor
     }
 
-    EditText pic_Name;
-    EditText pic_tags;
+    ListView listView;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_info_step, container, false);
-        TextView tv = (TextView) v.findViewById(R.id.textView);
-        tv.setText("Please start by filling the needed information ");
-
-        pic_Name = (EditText) v.findViewById(R.id.picName);
-        pic_tags = (EditText) v.findViewById(R.id.tags);
-
-        //and set default values by using Context Variables
-        pic_Name.setText(picName);
-        pic_tags.setText(tags);
+        listView = (ListView) v.findViewById(R.id.listView);
+        new GetTagsTask(getContext()).execute();
 
         return v;
     }
@@ -58,9 +64,78 @@ public class InfoStep extends WizardStep {
 
     private void bindDataFields() {
 
-        picName = pic_Name.getText().toString();
-        tags = pic_tags.getText().toString();
+        tags = new ArrayList<>(selected.values());
     }
+
+    private class GetTagsTask extends AsyncTask<Void, Void, List<Tag>> {
+        private Context context;
+        private WasteApi wasteApi;
+
+        public GetTagsTask(Context context) {
+            super();
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            wasteApi = CloudEndpointBuilderHelper.getEndpoints();
+        }
+
+        @Override
+        protected List<Tag> doInBackground(Void... params) {
+            try {
+                return wasteApi.tags().list().execute().getItems();
+            } catch (IOException e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Tag> result) {
+            String msg;
+            if (result == null) {
+                msg = "Connection failed";
+                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+            } else {
+                tags = result;
+                Integer index = 0;
+                ArrayList<String> entries = new ArrayList<>();
+                for(Tag tag : result) {
+                    entries.add(index,tag.getName());
+                    index++;
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_selectable_list_item, entries);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(selectionHandler);
+                System.out.println("this is the index " + index);
+            }
+        }
+    }
+
+    private AdapterView.OnItemClickListener selectionHandler = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            if(selected == null) {
+                selected = new HashMap<>();
+            }
+
+            if(defaultBackgroudColor == null) {
+                defaultBackgroudColor = view.getSolidColor();
+            }
+
+            Object entry = selected.get(position);
+            if(entry == null) {
+                selected.put(position, tags.get(position));
+                view.setBackgroundColor(Color.rgb(160,0,0));
+            } else {
+                selected.remove(position);
+                view.setBackgroundColor(defaultBackgroudColor);
+            }
+        }
+    };
+
 
 
 }
