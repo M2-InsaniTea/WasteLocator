@@ -40,6 +40,11 @@ public class ServeServlet extends HttpServlet {
             return;
         }
 
+        if (interest == null) {
+            res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown interest");
+            return;
+        }
+
         BlobKey blobKey = new BlobKey(interest.getPhoto().getKeyString());
         blobstoreService.serve(blobKey, res);
     }
