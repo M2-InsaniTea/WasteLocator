@@ -12,8 +12,11 @@
     </head>
     <body>
         <form action="<%= blobstoreService.createUploadUrl("/upload") %>" method="post" enctype="multipart/form-data">
-            <input type="text" name="foo">
-            <input type="file" name="myFile">
+            Tag: <input type="text" name="tagIds[]"><br/>
+            User: <input type="text" name="userId"><br/>
+            Latitude: <input type="text" name="latitude"><br/>
+            Longitude: <input type="text" name="longitude"><br/>
+            Photo: <input type="file" name="photo"><br/>
             <input type="submit" value="Submit">
         </form>
     </body>

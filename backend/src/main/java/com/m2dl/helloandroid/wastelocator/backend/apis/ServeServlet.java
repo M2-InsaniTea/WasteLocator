@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.m2dl.helloandroid.wastelocator.backend.models.Interest;
+
+import static com.m2dl.helloandroid.wastelocator.backend.OfyService.ofy;
 
 public class ServeServlet extends HttpServlet {
     private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
@@ -20,7 +23,24 @@ public class ServeServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res)
             throws IOException {
-        BlobKey blobKey = new BlobKey(req.getParameter("blob-key"));
+        String interestIdRaw = req.getParameter("interestId");
+        Long interestId = null;
+        try {
+            interestId = Long.parseLong(interestIdRaw);
+        } catch (NumberFormatException iea) {
+            res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid interest id");
+            return;
+        }
+
+        Interest interest = null;
+        try {
+            interest = ofy().load().type(Interest.class).id(interestId).now();
+        } catch (Exception e) {
+            res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid interest id");
+            return;
+        }
+
+        BlobKey blobKey = new BlobKey(interest.getPhoto().getKeyString());
         blobstoreService.serve(blobKey, res);
     }
 }

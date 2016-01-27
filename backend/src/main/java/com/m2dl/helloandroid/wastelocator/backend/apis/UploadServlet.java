@@ -45,14 +45,14 @@ public class UploadServlet extends HttpServlet {
             return;
         }
 
-        String[] tagIdsRow = req.getParameterValues(PARAM_TAG_IDS);
-        String userIdRow = req.getParameter(PARAM_USER_ID);
-        String latitudeRow = req.getParameter(PARAM_LATITUDE);
-        String longitudeRow = req.getParameter(PARAM_LONGITUDE);
+        String[] tagIdsRaw = req.getParameterValues(PARAM_TAG_IDS);
+        String userIdRaw = req.getParameter(PARAM_USER_ID);
+        String latitudeRaw = req.getParameter(PARAM_LATITUDE);
+        String longitudeRaw = req.getParameter(PARAM_LONGITUDE);
 
         List<Long> tagIds = new LinkedList<>();
         try {
-            for (String s : tagIdsRow) tagIds.add(Long.parseLong(s));
+            for (String s : tagIdsRaw) tagIds.add(Long.parseLong(s));
         } catch (NumberFormatException nfe) {
             res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid tag");
             return;
@@ -60,7 +60,7 @@ public class UploadServlet extends HttpServlet {
 
         Long userId = null;
         try {
-            userId = Long.parseLong(userIdRow);
+            userId = Long.parseLong(userIdRaw);
         } catch (NumberFormatException nfe) {
             res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user id");
             return;
@@ -68,8 +68,8 @@ public class UploadServlet extends HttpServlet {
 
         GeoPt geoPt = null;
         try {
-            Float latitude = Float.parseFloat(latitudeRow);
-            Float longitude = Float.parseFloat(longitudeRow);
+            Float latitude = Float.parseFloat(latitudeRaw);
+            Float longitude = Float.parseFloat(longitudeRaw);
             geoPt = new GeoPt(latitude, longitude);
         } catch (IllegalArgumentException e) {
             res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid latitude or longitude id");
@@ -80,7 +80,7 @@ public class UploadServlet extends HttpServlet {
             res.sendError(HttpServletResponse.SC_BAD_REQUEST, "No photo provided");
             return;
         } else {
-            FileInfo fileInfo = blobstoreService.getFileInfos(req).get("myFile").get(0);
+            FileInfo fileInfo = blobstoreService.getFileInfos(req).get(PARAM_PHOTO).get(0);
             String filename = fileInfo.getFilename();
             int i = filename.lastIndexOf('.');
             String extension = null;
