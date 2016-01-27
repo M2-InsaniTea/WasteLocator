@@ -30,7 +30,7 @@ public class InfoStep extends WizardStep {
     private List<Tag> tags;
 
     private HashMap<Integer,Tag> selected;
-    private Integer defaultBackgroudColor;
+    private Integer defaultBackgroundColor;
 
 
     public InfoStep() {
@@ -109,7 +109,6 @@ public class InfoStep extends WizardStep {
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_selectable_list_item, entries);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(selectionHandler);
-                System.out.println("this is the index " + index);
             }
         }
     }
@@ -117,8 +116,8 @@ public class InfoStep extends WizardStep {
     private AdapterView.OnItemClickListener selectionHandler = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if(defaultBackgroudColor == null) {
-                defaultBackgroudColor = view.getSolidColor();
+            if(defaultBackgroundColor == null) {
+                defaultBackgroundColor = view.getSolidColor();
             }
 
             Object entry = selected.get(position);
@@ -127,7 +126,7 @@ public class InfoStep extends WizardStep {
                 view.setBackgroundColor(Color.rgb(160,0,0));
             } else {
                 selected.remove(position);
-                view.setBackgroundColor(defaultBackgroudColor);
+                view.setBackgroundColor(defaultBackgroundColor);
             }
         }
     };
