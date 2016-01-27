@@ -182,6 +182,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             options.fillColor(color);
             options.strokeColor(color);
 
+
             mMap.addPolygon(options);
 
         }
@@ -198,7 +199,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new Predicate<Tag>() {
                         @Override
                         public boolean apply(Tag input) {
-                            return input.getId() == firstTagId;
+                            return input.getId().equals(firstTagId);
                         }
                     }).orNull();
 

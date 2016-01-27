@@ -17,4 +17,6 @@ public class WizardFragment extends BasicWizardLayout {
                 .addStep(PictureStep.class)
                 .create();
     }
+
+
 }

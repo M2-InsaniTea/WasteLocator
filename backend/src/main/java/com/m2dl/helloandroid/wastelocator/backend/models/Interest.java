@@ -6,21 +6,17 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.OnLoad;
-import com.googlecode.objectify.annotation.Parent;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Nullable;
 
 /**
  * Created by flemoal on 21/01/16.
@@ -51,11 +47,11 @@ public class Interest {
 
     private BlobKey photo;
 
-    private Set<GeoPt> locations = new HashSet<>();
+    private Set<GeoPt> locations = new LinkedHashSet<>();
 
     @Load
     @ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
-    private Set<Ref<Tag>> tags = new HashSet<>();
+    private Set<Ref<Tag>> tags = new LinkedHashSet<>();
 
     public Long getId() {
         return id;
