@@ -45,8 +45,9 @@ public class InfoStep extends WizardStep {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_info_step, container, false);
         listView = (ListView) v.findViewById(R.id.listView);
-        new GetTagsTask(getContext()).execute();
+        selected = new HashMap<>();
 
+        new GetTagsTask(getContext()).execute();
         return v;
     }
 
@@ -116,11 +117,6 @@ public class InfoStep extends WizardStep {
     private AdapterView.OnItemClickListener selectionHandler = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            if(selected == null) {
-                selected = new HashMap<>();
-            }
-
             if(defaultBackgroudColor == null) {
                 defaultBackgroudColor = view.getSolidColor();
             }
