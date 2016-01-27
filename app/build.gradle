@@ -18,6 +18,9 @@ android {
          */
         buildConfigField "String", "ROOT_URL",
                 "\"https://androidbackend-1191.appspot.com/_ah/api/\""
+
+        buildConfigField "String", "UPLOAD_URL",
+                "\"https://androidbackend-1191.appspot.com/_ah/upload/\""
         // The IP ADDRESS of your SERVER. Yours may be different.
         /**
          * Defines whether authentication is required or not. Only works once

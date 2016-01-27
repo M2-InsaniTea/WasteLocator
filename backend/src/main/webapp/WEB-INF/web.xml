@@ -13,9 +13,26 @@
             </param-value>
         </init-param>
     </servlet>
+    <servlet>
+        <servlet-name>Upload</servlet-name>
+        <servlet-class>com.m2dl.helloandroid.wastelocator.backend.apis.UploadServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Serve</servlet-name>
+        <servlet-class>com.m2dl.helloandroid.wastelocator.backend.apis.ServeServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>SystemServiceServlet</servlet-name>
         <url-pattern>/_ah/spi/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Upload</servlet-name>
+        <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Serve</servlet-name>
+        <url-pattern>/serve</url-pattern>
     </servlet-mapping>
 
     <filter>
@@ -26,4 +43,14 @@
         <filter-name>ObjectifyFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>MaintenanceTasksServlet</web-resource-name>
+            <url-pattern>/admin/buildsearchindex</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
 </web-app>

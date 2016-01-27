@@ -16,27 +16,62 @@
 
 package com.m2dl.helloandroid.wastelocator;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.m2dl.helloandroid.wastelocator.backend.wasteApi.WasteApi;
+import com.m2dl.helloandroid.wastelocator.backend.wasteApi.model.GeoPt;
+import com.m2dl.helloandroid.wastelocator.backend.wasteApi.model.Interest;
+import com.m2dl.helloandroid.wastelocator.backend.wasteApi.model.ListInterestBean;
+import com.m2dl.helloandroid.wastelocator.backend.wasteApi.model.Tag;
+import com.m2dl.helloandroid.wastelocator.backend.wasteApi.model.UserAccount;
+
+import java.util.ArrayList;
+import java.util.List;
+import android.content.Intent;
+
 /**
  * This shows how to create a simple activity with a map and a marker on the map.
  */
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private WasteApi wasteApi;
+
+    GoogleMap mMap;
+
+    static final CameraPosition SYDNEY =
+            new CameraPosition.Builder().target(new LatLng(-33.87365, 151.20689))
+                    .zoom(15.5f)
+                    .bearing(0)
+                    .tilt(25)
+                    .build();
+    static final CameraPosition BMIG =
+            new CameraPosition.Builder().target(new LatLng(43.560802, 1.468649))
+                    .zoom(16.5f)
+                    .bearing(0)
+                    .tilt(25)
+                    .build();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        wasteApi = CloudEndpointBuilderHelper.getEndpoints();
         setContentView(R.layout.activity_maps);
 
         SupportMapFragment mapFragment =
@@ -51,7 +86,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap map) {
-        map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+
+        mMap = map;
+
+        new GetInterestsAsyncTask(this).execute();
+
+        //map.addMarker(new MarkerOptions().position(BMIG.target).title("Marker"));
+
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(BMIG));
+
     }
 
     @Override
@@ -72,4 +115,98 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return false;
     }
+
+    public void callbackFromGetInterestsAsyncTask(ListInterestBean result) {
+
+        List<Interest> interests = result.getInterests();
+        List<Tag> tags = result.getTags();
+
+        for (Interest interest : interests) {
+            drawInterest(interest, tags);
+        }
+
+    }
+
+    public void drawInterest(Interest interest, List<Tag> tags) {
+
+        // System.out.println(interest.getId());
+
+        List<GeoPt> locations = interest.getLocations();
+
+        if (locations.isEmpty())
+            return;
+
+        if (locations.size() == 1) {
+
+            // draw a marker
+            String markerText = "";
+
+            // coordinates
+            double latitude = locations.get(0).getLatitude();
+            double longitude = locations.get(0).getLongitude();
+
+            // tags name
+            ArrayList<String> listTagsName = new ArrayList<>();
+            for (Long tagID : interest.getTagIds()) {
+                for (Tag tag : tags) {
+                    if (tag.getId().equals(tagID)) {
+                        listTagsName.add(tag.getName());
+                    }
+                }
+            }
+
+            if (!listTagsName.isEmpty()) {
+                markerText += Joiner.on(", ").join(listTagsName);
+            }
+
+            // submitter
+            UserAccount submitter = interest.getSubmitter();
+            if (submitter != null) {
+                markerText += "\n"+submitter.getUsername();
+            }
+
+            mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(markerText));
+
+        } else {
+
+            PolygonOptions options = new PolygonOptions();
+            for (GeoPt geoPt : locations) {
+
+                double latitude = geoPt.getLatitude();
+                double longitude = geoPt.getLongitude();
+
+                options.add(new LatLng(latitude, longitude));
+
+            }
+            int color = Color.parseColor(getColorOfInterest(interest, tags));
+            options.fillColor(color);
+            options.strokeColor(color);
+
+            mMap.addPolygon(options);
+
+        }
+
+    }
+
+    private String getColorOfInterest(Interest interest, List<Tag> tags) {
+
+        List<Long> tagIds = interest.getTagIds();
+        if (tagIds != null && !tagIds.isEmpty()) {
+            final Long firstTagId = tagIds.get(0);
+
+            Tag myTag = Iterables.tryFind(tags,
+                    new Predicate<Tag>() {
+                        @Override
+                        public boolean apply(Tag input) {
+                            return input.getId() == firstTagId;
+                        }
+                    }).orNull();
+
+            if (myTag != null) {
+                return myTag.getColor();
+            }
+        }
+        return "#000000"; // Couleur par défaut si on a rien trouvé. Là c'est du noir
+    }
+
 }
