@@ -16,6 +16,7 @@
 
 package com.m2dl.helloandroid.wastelocator;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -107,6 +108,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.disconnect:
+
+                SharedPreferences settings = getSharedPreferences("wastelocator", 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.remove("userId");
+                editor.commit();
+
+                Intent intentHome = new Intent(this, HomeActivity.class);
+                startActivity(intentHome);
+                return true;
+
             case R.id.post_interest:
                 Intent intent = new Intent(this, InterestActivity.class);
                 startActivity(intent);

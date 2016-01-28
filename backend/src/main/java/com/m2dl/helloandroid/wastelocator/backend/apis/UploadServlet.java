@@ -41,7 +41,7 @@ public class UploadServlet extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
         if (!req.getParameterMap().keySet().containsAll(EXPECTED_ARGS)) {
-            res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing args");
+            res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing args" + req.getParameterMap().keySet().toString());
             return;
         }
 
