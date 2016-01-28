@@ -113,6 +113,7 @@ public class PictureStep extends WizardStep {
                 System.out.println("this is lat" + latitude);
 
                 if (bitmap == null) {
+                } else if (latitude == null || longitude == null) {
                 } else {
                     new SendDataAsyncTask().execute();
                 }
@@ -122,7 +123,6 @@ public class PictureStep extends WizardStep {
                 break;
         }
     }
-
 
 
     @Override
@@ -188,8 +188,8 @@ public class PictureStep extends WizardStep {
                 reqEntity.addPart("latitude", new StringBody(Double.toString(latitude), ContentType.TEXT_PLAIN));
                 reqEntity.addPart("longitude", new StringBody(Double.toString(longitude), ContentType.TEXT_PLAIN));
 
-                for (Tag tag: tags) {
-                    reqEntity.addPart("tagIds", new StringBody(tag.getId().toString(), ContentType.TEXT_PLAIN));
+                for (Tag tag : tags) {
+                    reqEntity.addPart("tagIds[]", new StringBody(tag.getId().toString(), ContentType.TEXT_PLAIN));
                 }
 
                 try {
